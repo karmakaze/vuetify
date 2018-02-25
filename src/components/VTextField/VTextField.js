@@ -1,5 +1,5 @@
 // Styles
-import '../../stylus/components/_input-groups.styl'
+import '../../stylus/components/_input.styl'
 import '../../stylus/components/_text-fields.styl'
 
 // Mixins
@@ -33,7 +33,6 @@ export default {
     autofocus: Boolean,
     autoGrow: Boolean,
     box: Boolean,
-    clearable: Boolean,
     color: {
       type: String,
       default: 'primary'
@@ -65,26 +64,30 @@ export default {
 
   computed: {
     classes () {
-      const classes = {
-        ...this.genSoloClasses(),
-        'input-group--text-field': true,
-        'input-group--text-field-box': this.box,
-        'input-group--single-line': this.singleLine || this.isSolo,
-        'input-group--multi-line': this.multiLine,
-        'input-group--full-width': this.fullWidth,
-        'input-group--no-resize': this.noResizeHandle,
-        'input-group--prefix': this.prefix,
-        'input-group--suffix': this.suffix,
-        'input-group--textarea': this.textarea
+      return {
+        'v-input--text': true,
+        'v-input--text--affix': (this.prefix || this.suffix)
       }
+      // const classes = {
+      // ...this.genSoloClasses(),
+      // 'input-group--text-field': true,
+      // 'input-group--text-field-box': this.box,
+      // 'input-group--single-line': this.singleLine || this.isSolo,
+      // 'input-group--multi-line': this.multiLine,
+      // 'input-group--full-width': this.fullWidth,
+      // 'input-group--no-resize': this.noResizeHandle,
+      // 'input-group--prefix': this.prefix,
+      // 'input-group--suffix': this.suffix,
+      // 'input-group--textarea': this.textarea
+      // }
 
-      if (this.hasError) {
-        classes['error--text'] = true
-      } else {
-        return this.addTextColorClassChecks(classes)
-      }
+      // if (this.hasError) {
+      //   classes['error--text'] = true
+      // } else {
+      //   return this.addTextColorClassChecks(classes)
+      // }
 
-      return classes
+      // return classes
     },
     count () {
       let inputLength
@@ -212,14 +215,6 @@ export default {
 
       this.internalChange = true
     },
-    genCounter () {
-      return this.$createElement('div', {
-        'class': {
-          'input-group__counter': true,
-          'input-group__counter--error': this.hasError
-        }
-      }, this.count)
-    },
     genInput () {
       const tag = this.isTextarea ? 'textarea' : 'input'
       const listeners = Object.assign({}, this.$listeners)
@@ -272,8 +267,8 @@ export default {
       return children
     },
     genFix (type) {
-      return this.$createElement('span', {
-        'class': `input-group--text-field__${type}`
+      return this.$createElement('div', {
+        'class': `v-input--text__${type}`
       }, this[type])
     },
     clearableCallback () {
@@ -283,6 +278,7 @@ export default {
   },
 
   render () {
-    return this.genInputGroup(this.genInput(), { attrs: { tabindex: false } })
+    return this.genInputGroup()
+    // return this.genInputGroup(this.genInput(), { attrs: { tabindex: false } })
   }
 }
